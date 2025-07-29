@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // ✅ Use sua chave
-const genAI = new GoogleGenerativeAI("AIzaSyAFFIBmVG5WRAe7fKSqD1jkhn1-H788J7k");
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+const genAI = new GoogleGenerativeAI(apiKey);
 
 function App() {
   const [peso, setPeso] = useState("");
