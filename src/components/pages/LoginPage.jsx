@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/api";
+import { Link } from "react-router-dom";
 import "./LoginPage.css"; // <-- importe o CSS
 
 export default function LoginPage() {
@@ -53,6 +54,9 @@ export default function LoginPage() {
         <button className="login-button" type="submit">
           Entrar
         </button>
+        <p>
+        Ainda nao tem contra ?<Link to="/Register">Cadastrar</Link>
+      </p>
       </form>
     </div>
   );

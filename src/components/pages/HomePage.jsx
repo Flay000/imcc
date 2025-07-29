@@ -20,6 +20,29 @@ function App() {
       setIMC(imcCalculado.toFixed(2));
     }
   };
+  async function salvarDadosNoBanco(peso, altura, imc, imagemUrl) {
+    const token = localStorage.getItem("token");
+    if (!token) return alert("Você precisa estar logado para salvar os dados!");
+
+    try {
+      const response = await fetch("http://localhost:5000/api/data/save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ peso, altura, imc, imagemUrl }),
+      });
+
+      if (!response.ok) throw new Error("Erro ao salvar dados");
+
+      const data = await response.json();
+      alert(data.message);
+    } catch (error) {
+      console.error("Erro:", error);
+      alert("Erro ao salvar dados no banco.");
+    }
+  }
 
   const analisarImagem = async () => {
     if (!imagem) return alert("Envie uma imagem antes!");
@@ -47,6 +70,8 @@ function App() {
     } finally {
       setCarregando(false);
     }
+    await salvarDadosNoBanco(peso, altura, imc, imagem ? URL.createObjectURL(imagem) : null);
+    setPeso("");
   };
 
   const toBase64 = (file) => {

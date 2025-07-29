@@ -1,25 +1,28 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { register } from "../services/api";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function RegisterPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: ""
+  });
   const [success, setSuccess] = useState("");
-  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setSuccess("");
-
+    e.preventDefault(); // impede o reload da página
     try {
-      await register(username, password);
-      setSuccess("Usuário criado com sucesso! Você será redirecionado para o login.");
-      setTimeout(() => navigate("/login"), 2000);
-    } catch (err) {
-      setError(err.message);
+      await axios.post("http://localhost:3000/api/auth/register", form);
+      setSuccess("Usuário cadastrado com sucesso!");
+      setForm({ username: "", email: "", password: "" }); // limpa o formulário
+    } catch (error) {
+      alert("Erro ao cadastrar.");
+      console.error(error);
     }
   };
 
@@ -29,24 +32,34 @@ export default function RegisterPage() {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
+          name="username"
           placeholder="Usuário"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={form.username}
+          onChange={handleChange}
+          required
+          style={{ width: "100%", padding: 8, marginBottom: 10 }}
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={handleChange}
           required
           style={{ width: "100%", padding: 8, marginBottom: 10 }}
         />
         <input
           type="password"
+          name="password"
           placeholder="Senha"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={form.password}
+          onChange={handleChange}
           required
           style={{ width: "100%", padding: 8, marginBottom: 10 }}
         />
         <button type="submit" style={{ width: "100%", padding: 10 }}>
           Cadastrar
         </button>
-        {error && <p style={{ color: "red", marginTop: 10 }}>{error}</p>}
         {success && <p style={{ color: "green", marginTop: 10 }}>{success}</p>}
       </form>
       <p>
