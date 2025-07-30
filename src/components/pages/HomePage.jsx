@@ -25,7 +25,7 @@ function App() {
     if (!token) return alert("Você precisa estar logado para salvar os dados!");
 
     try {
-      const response = await fetch("http://localhost:5000/api/data/save", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/data/save`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

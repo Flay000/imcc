@@ -17,7 +17,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault(); // impede o reload da página
     try {
-      await axios.post("http://localhost:3000/api/auth/register", form);
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`,  form);
       setSuccess("Usuário cadastrado com sucesso!");
       setForm({ username: "", email: "", password: "" }); // limpa o formulário
     } catch (error) {
